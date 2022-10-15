@@ -171,7 +171,7 @@ packages:
     source: hosted
     version: "2.1.12"
   google_maps_flutter_platform_interface:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: google_maps_flutter_platform_interface
       url: "https://pub.dartlang.org"
@@ -297,7 +297,7 @@ packages:
     source: hosted
     version: "1.8.0"
   plugin_platform_interface:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
@@ -372,7 +372,7 @@ packages:
     source: hosted
     version: "2.1.0"
   stream_transform:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: stream_transform
       url: "https://pub.dartlang.org"
