@@ -46,6 +46,11 @@ dependencies:
   qr_code_scanner: ^0.7.0
   google_maps_flutter: ^2.2.1
   google_maps_flutter_web: ^0.4.0+3
+  geolocator: ^9.0.2
+  location: ^4.4.0
+  cloud_firestore: ^3.5.1
+  geoflutterfire: ^3.0.3
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

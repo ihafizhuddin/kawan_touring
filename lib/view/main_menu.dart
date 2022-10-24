@@ -1,10 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kawan_touring/models/user_model.dart';
+import 'package:provider/provider.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String id = FirebaseAuth.instance.currentUser!.uid;
+    String? email = FirebaseAuth.instance.currentUser!.email;
+    String username = email!.substring(0, email.indexOf('@'));
+    Provider.of<UserModel>(context, listen: false)
+        .setUserDataWhenLogin(id, email, username);
     return Scaffold(
       body: Center(
         child: Column(
@@ -69,9 +78,18 @@ class MainMenu extends StatelessWidget {
                 ],
               ),
             ),
+
             //
           ],
         ),
+      ),
+      floatingActionButton: IconButton(
+        onPressed: () async {
+          await Logout();
+          Provider.of<UserModel>(context, listen: false)
+              .setUserDataWhenLogout();
+        },
+        icon: Icon(FontAwesomeIcons.rightFromBracket),
       ),
     );
   }

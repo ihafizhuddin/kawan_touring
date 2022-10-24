@@ -1,5 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kawan_touring">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/> 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    <application
         android:label="kawan_touring"
         android:name="${applicationName}"
@@ -8,9 +16,7 @@
         <!-- TODO: Add your Google Maps API key here -->
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyCClhQ1wHDl0goEDr112lvDxFEL9_YrJy8"/>
-        <!-- <uses-permission android:name="android.permission.CAMERA" />
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
+        
 
         <activity
             android:name=".MainActivity"
@@ -38,5 +44,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            
     </application>
 </manifest>

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kawan_touring/models/touring_event.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 //Join tour by scanning
@@ -21,8 +23,8 @@ class ScanTourQR extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(5),
               color: Colors.lightBlueAccent,
-              // width: MediaQuery.of(context).size.width / 2,
-              // height: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
               child: QRScanner(),
 
               //   Container(
@@ -35,16 +37,16 @@ class ScanTourQR extends StatelessWidget {
               //       // height: 300,
               //       ),
             ),
-            Padding(
-              padding: EdgeInsets.all(15),
-              child: ElevatedButton(
-                child: Text('if_succes go to tour info'),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/tour_info');
-                },
-              ),
-            )
           ],
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.all(15),
+        child: ElevatedButton(
+          child: Text('if_succes go to tour info'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/tour_info');
+          },
         ),
       ),
     );
@@ -60,14 +62,30 @@ class QRScanner extends StatefulWidget {
 
 class _QRScannerState extends State<QRScanner> {
   Barcode? result;
+  String qrValue = '';
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   void _onQRViewCreated(QRViewController controller) {
     setState(() => this.controller = controller);
     controller.scannedDataStream.listen((scanData) {
-      setState(() => result = scanData);
+      // setState(() => result = scanData);
+      setState(() async {
+        result = scanData;
+        qrValue = scanData.code!;
+        // String tourIdget = result.toString();
+        print('id tour : $qrValue');
+        await Provider.of<TourModel>(context, listen: false)
+            .setTourDataFromDB(qrValue);
+        nextPageRoute();
+      });
     });
+  }
+
+  nextPageRoute() async {
+    controller?.pauseCamera();
+
+    var value = await Navigator.pushNamed(context, '/tour_info');
   }
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -86,6 +104,7 @@ class _QRScannerState extends State<QRScanner> {
     if (result != null) {
       controller!.pauseCamera();
       print(result!.code);
+
       controller!.dispose();
     }
   }
@@ -125,34 +144,37 @@ class JoinTourInfo extends StatelessWidget {
       body: Center(
         child: Container(
           child: Card(
-            // constraints: BoxConstraints(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text('Link'),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text('Pemimpin Tour : Bram'),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text('Tujuan : Brawijaya'),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    child: Text('Join Tour'),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/join_tour');
-                    },
+              // constraints: BoxConstraints(),
+              child: Consumer<TourModel>(
+            builder: (context, TourModel tourModel, child) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Text('Link'),
                   ),
-                ),
-              ],
-            ),
-          ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Text('Pemimpin Tour : ${tourModel.tour.creatorId}'),
+                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.all(5),
+                  //   child: Text('Tujuan : Brawijaya'),
+                  // ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      child: Text('Join Tour'),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/join_tour');
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          )),
         ),
       ),
     );
